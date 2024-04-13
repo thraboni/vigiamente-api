@@ -1,0 +1,7 @@
+# VigiaMente - API
+
+O projeto VigiaMente tem como objetivo desenvolver uma aplicação web que vincula contas do X e identifica potenciais sinais de risco suicida nos posts dessas contas. Ao oferecer uma plataforma para analisar comportamentos online relacionados à saúde mental, o VigiaMente não apenas permite intervenções precoces, mas também fornece ferramentas valiosas para psicólogos monitorarem seus pacientes de forma eficaz e confidencial.
+
+Este repositório contém os arquivos e recursos relacionados à API Comunicadora do projeto VigiaMente, responsável por facilitar a comunicação entre as diferentes partes do sistema. A API é projetada para enviar dados para serem inseridos no banco de dados MongoDB, enviar requisições para a classificadora quando necessário realizar classificações e se comunicar com a aplicação web para fornecer e receber informações de forma eficiente e segura.
+
+Este projeto é fruto do curso de Projeto Integrador de Sistemas, uma disciplina que visa integrar conhecimentos teóricos e práticos adquiridos ao longo do curso de graduação. Desenvolvido de forma colaborativa pelos alunos Lucas Machado, Rhuan Magalhães e Thácito Raboni, sob a orientação e supervisão do professor Diego Cardoso, o projeto busca aplicar habilidades e técnicas aprendidas em sala de aula na criação de uma solução prática e inovadora.
