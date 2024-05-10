@@ -1,11 +1,12 @@
 import express from "express";
-import livros from "./livrosRoutes.js";
-import autores from "./autoresRouter.js";
+import tweets from "./tweetsRouter.js"
+import usuarios from "./usuariosRouter.js"
+import perfis from "./perfisRouter.js"
 
 const routes = (app) => {
-    app.route("/").get((req, res) => res.status(200).send("Curso de Node.js"));
+    app.route("/").get((req, res) => res.status(200).send("VigiaMente"));
 
-    app.use(express.json(), livros, autores);
+    app.use(express.json(), usuarios, tweets, perfis);
 
 };
 
