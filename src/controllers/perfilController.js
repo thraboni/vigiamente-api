@@ -36,7 +36,7 @@ class PerfilController {
                 const perfilCriado = await perfil.create(perfilCompleto);
                 res.status(201).json({ message: "Perfil criado com sucesso", perfil: perfilCriado });
             } else {
-                const perfilCriado = await Perfil.create(novoPerfil);
+                const perfilCriado = await perfil.create(novoPerfil);
                 res.status(201).json({ message: "Perfil criado com sucesso", perfil: perfilCriado });
             }
         } catch (error) {

@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import conectaNaDatabase from "./config/dbConnect.js";
 import routes from "./routes/index.js";
 
@@ -13,5 +14,6 @@ conexao.once("open", () => {
 });
 
 const app = express();
+app.use(cors());
 routes(app);
 export default app;

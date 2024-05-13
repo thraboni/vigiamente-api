@@ -24,9 +24,11 @@ class UsuarioController {
 
     static async cadastrarUsuario(req, res) {
         const novoUsuario = req.body;
+
     
         try {
             if (novoUsuario.perfis && novoUsuario.perfis.length > 0) {
+                console.log(novoUsuario);
                 const perfisIds = novoUsuario.perfis;
                 const perfisEncontrados = await perfil.find({ _id: { $in: perfisIds } });
                 const perfisDetalhados = perfisEncontrados.map(perfil => {
@@ -36,7 +38,7 @@ class UsuarioController {
                 const usuarioCriado = await usuario.create(usuarioCompleto);
                 res.status(201).json({ message: "Usuario criado com sucesso", usuario: usuarioCriado });
             } else {
-                const usuarioCriado = await Usuario.create(novoUsuario);
+                const usuarioCriado = await usuario.create(novoUsuario);
                 res.status(201).json({ message: "Usuario criado com sucesso", usuario: usuarioCriado });
             }
         } catch (error) {

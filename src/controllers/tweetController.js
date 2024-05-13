@@ -5,7 +5,7 @@ class TweetController {
     static async listarTweets (req, res) {
         try {
             const listaTweets = await tweet.find({});
-            res.status(200).json(listaTweets);
+            res.status(304).json(listaTweets);
         } catch (erro) {
             res.status(500).json({ message: `${erro.message} - Falha na requisição` });
         };
