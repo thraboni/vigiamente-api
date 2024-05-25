@@ -1,5 +1,5 @@
 import { tweet } from "../models/Tweet.js";
-
+import { perfil } from "../models/Perfil.js";
 class TweetController {
 
     static async listarTweets (req, res) {
@@ -21,14 +21,37 @@ class TweetController {
         };
     };
 
-    static async cadastrarTweet (req, res) {
+    static async cadastrarTweet(req, res) {
         try {
+            // Verifica se o link já está presente no banco de dados
+            const linkExistente = await tweet.findOne({ link: req.body.link });
+    
+            // Se o link já existir, retorna uma mensagem informando que o tweet não foi cadastrado
+            if (linkExistente) {
+                return res.status(200).json({ message: "O tweet não foi cadastrado porque o link já existe" });
+            }
+    
+            // Cria um novo tweet
             const novoTweet = await tweet.create(req.body);
+    
+            // Extrai o ID do perfil do corpo da requisição
+            const perfilId = req.body.perfilId;
+    
+            // Verifica se o perfilId está presente
+            if (!perfilId) {
+                return res.status(400).json({ message: "Perfil ID não fornecido" });
+            }
+    
+            // Atualiza o perfil com o novo tweet
+            await perfil.findByIdAndUpdate(perfilId, { $push: { tweets: novoTweet._id } });
+    
+            // Responde com sucesso
             res.status(201).json({ message: "Criado com sucesso", tweet: novoTweet });
         } catch (erro) {
-            res.status(500).json({ message: `${erro.message} - Falha ao cadastrar tweet` })
-        };
-    };
+            res.status(500).json({ message: `${erro.message} - Falha ao cadastrar tweet` });
+        }
+    }
+    
 
     static async atualizarTweet (req, res) {
         try {
