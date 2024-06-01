@@ -1,6 +1,7 @@
 import { usuario } from "../models/Usuario.js";
 import { perfil } from "../models/Perfil.js";
 import nodemailer from 'nodemailer';
+import bcrypt from 'bcryptjs';
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -39,7 +40,7 @@ class UsuarioController {
 
     async function enviarEmail(destinatario, senha) {
       const mailOptions = {
-        from: "thacito.raboni@gmail.com",
+        from: "vigiamente.app@gmail.com",
         to: destinatario,
         subject: "Sua nova senha VigiaMente",
         text: `Olá,\n\nSua nova senha é: ${senha}\n\nPor favor, altere sua senha após o primeiro login.`,
@@ -55,18 +56,23 @@ class UsuarioController {
 
     function gerarSenhaAleatoria(length) {
       const caracteres =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      const caracteresEspeciais =
+        "!@#$%^&*()_+~`|}{[]:;?><,./-=";
       let senha = "";
-      for (let i = 0; i < length; i++) {
+      for (let i = 0; i < length - 1; i++) {
         const randomIndex = Math.floor(Math.random() * caracteres.length);
         senha += caracteres[randomIndex];
       }
+      const randomIndex = Math.floor(Math.random() * caracteresEspeciais.length);
+      senha += caracteresEspeciais[randomIndex];
       return senha;
     }
 
     try {
       const senhaAleatoria = gerarSenhaAleatoria(16);
-      novoUsuario.senha = senhaAleatoria;
+      const senhaHash = await bcrypt.hash(senhaAleatoria, 8);
+      novoUsuario.senha = senhaHash;
 
       if (novoUsuario.perfis && novoUsuario.perfis.length > 0) {
         console.log(novoUsuario);
