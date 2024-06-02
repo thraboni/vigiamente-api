@@ -27,6 +27,7 @@ const router = express.Router();
  *                 $ref: '#/components/schemas/User'
  */
 router.get("/usuarios", UsuarioController.listarUsuarios);
+router.get("/usuarios/perfis", UsuarioController.listarPerfisDeUsuario);
 
 /**
  * @swagger

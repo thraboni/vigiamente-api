@@ -1,3 +1,4 @@
+import { usuario } from "../models/Usuario.js";
 import { perfil } from "../models/Perfil.js";
 import { tweet } from "../models/Tweet.js";
 
@@ -43,6 +44,31 @@ class PerfilController {
             res.status(500).json({ message: `Falha ao cadastrar perfil: ${error.message}` });
         }
     };
+
+    static async cadastrarPerfilUsuario(req, res) {
+        const usuarioTwitter = req.body.usuario;
+        const usuarioUsuario = req.usuarioUsuario;
+        console.log(usuarioTwitter);
+    
+        try {
+            const perfilCriado = await perfil.create({ usuario: usuarioTwitter });
+    
+            const usuarioAtualizado = await usuario.findOneAndUpdate(
+                { usuario: usuarioUsuario },
+                { $push: { perfis: perfilCriado } },
+                { new: true }
+            );
+    
+            if (!usuarioAtualizado) {
+                return res.status(404).json({ message: "Usuário não encontrado" });
+            }
+    
+            res.status(201).json({ message: "Perfil criado e adicionado ao usuário com sucesso", perfil: perfilCriado });
+        } catch (error) {
+            res.status(500).json({ message: `Falha ao cadastrar perfil: ${error.message}` });
+        }
+    };
+    
 
     static async atualizarPerfil (req, res) {
         try {

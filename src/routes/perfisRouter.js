@@ -76,6 +76,7 @@ routes.get("/perfis/:id", PerfilController.listarPerfilPorId);
  *         description: Erro na requisição
  */
 routes.post("/perfis", PerfilController.cadastrarPerfil);
+routes.post("/app/perfis", PerfilController.cadastrarPerfilUsuario);
 
 /**
  * @swagger

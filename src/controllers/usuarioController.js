@@ -35,6 +35,21 @@ class UsuarioController {
     }
   }
 
+  static async listarPerfisDeUsuario(req, res) {
+    const usuarioUsuario = req.usuarioUsuario;
+
+    try {
+      const usuarioEncontrado = await usuario.findOne({usuario: usuarioUsuario});
+      const listaPerfis = usuarioEncontrado.perfis;
+
+      res.status(200).json(listaPerfis);
+    } catch (erro) {
+      res
+        .status(500)
+        .json({ message: `${erro.message} - Falha na requisição` });
+    }
+  }
+
   static async cadastrarUsuario(req, res) {
     const novoUsuario = req.body;
 

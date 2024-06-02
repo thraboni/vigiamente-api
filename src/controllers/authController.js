@@ -24,7 +24,7 @@ class AuthController {
         throw new Error("Senha invalida");
       }
 
-      const login = jsonwebtoken.sign(
+      const token = jsonwebtoken.sign(
         {
           id: usuarioAutenticacao.id,
           usuario: usuarioAutenticacao.usuario,
@@ -35,7 +35,7 @@ class AuthController {
         }
       );
 
-      return res.status(200).send({ login });
+      return res.status(200).send({ token });
     } catch (error) {
       res.status(401).send({ message: error.message });
     }
