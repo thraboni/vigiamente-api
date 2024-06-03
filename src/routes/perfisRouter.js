@@ -27,6 +27,7 @@ const routes = express.Router();
  *                 $ref: '#/components/schemas/Perfil'
  */
 routes.get("/perfis", PerfilController.listarPerfis);
+routes.get("/perfis/:id/tweets", PerfilController.listarTweets);
 
 /**
  * @swagger
