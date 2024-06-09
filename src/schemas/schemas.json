@@ -1,97 +1,127 @@
 {
-    "User": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "ID único do usuário",
-          "example": "60d0fe4f5311236168a109ca"
-        },
-        "usuario": {
-          "type": "string",
-          "description": "Nome de usuário",
-          "example": "johndoe"
-        },
-        "senha": {
-          "type": "string",
-          "description": "Senha do usuário",
-          "example": "SenhaForte123"
-        },
-        "email": {
-          "type": "string",
-          "format": "email",
-          "description": "Endereço de e-mail do usuário",
-          "example": "johndoe@example.com"
-        },
-        "perfis": {
-          "type": "array",
-          "items": {
-            "$ref": "#/components/schemas/Profile"
-          },
-          "description": "Lista de perfis associados ao usuário"
-        },
-        "admin": {
-          "type": "boolean",
-          "description": "Indica se o usuário é administrador",
-          "example": true
-        }
+  "User": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "ID único do usuário",
+        "example": "60d0fe4f5311236168a109ca"
       },
-      "required": ["usuario", "senha", "email"]
+      "usuario": {
+        "type": "string",
+        "description": "Nome de usuário",
+        "example": "johndoe"
+      },
+      "senha": {
+        "type": "string",
+        "description": "Senha do usuário",
+        "example": "SenhaForte123"
+      },
+      "email": {
+        "type": "string",
+        "format": "email",
+        "description": "Endereço de e-mail do usuário",
+        "example": "johndoe@example.com"
+      },
+      "perfis": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Perfil"
+        },
+        "description": "Lista de perfis associados ao usuário"
+      },
+      "admin": {
+        "type": "boolean",
+        "description": "Indica se o usuário é administrador",
+        "example": true
+      }
     },
-    "Perfil": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "ID único do perfil",
-          "example": "60d0fe4f5311236168a109cb"
-        },
-        "usuario": {
-          "type": "string",
-          "description": "Nome de usuário no perfil",
-          "example": "profileuser"
-        },
-        "tweets": {
-          "type": "array",
-          "items": {
-            "$ref": "#/components/schemas/Tweet"
-          },
-          "description": "Lista de tweets associados ao perfil"
-        }
+    "required": ["usuario", "senha", "email"]
+  },
+  "Perfil": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "ID único do perfil",
+        "example": "60d0fe4f5311236168a109cb"
       },
-      "required": ["usuario"]
+      "usuario": {
+        "type": "string",
+        "description": "Nome de usuário no perfil",
+        "example": "profileuser"
+      },
+      "tweets": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Tweet"
+        },
+        "description": "Lista de tweets associados ao perfil"
+      }
     },
-    "Tweet": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "ID único do tweet",
-          "example": "60d0fe4f5311236168a109cc"
-        },
-        "texto": {
-          "type": "string",
-          "description": "Conteúdo do tweet",
-          "example": "Este é um tweet de exemplo"
-        },
-        "link": {
-          "type": "string",
-          "description": "Link associado ao tweet",
-          "example": "http://exemplo.com"
-        },
-        "data": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Data de criação do tweet",
-          "example": "2023-05-01T12:34:56Z"
-        },
-        "isSuicida": {
-          "type": "boolean",
-          "description": "Indica se o tweet contém conteúdo suicida",
-          "example": false
-        }
+    "required": ["usuario"]
+  },
+  "Tweet": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "ID único do tweet",
+        "example": "60d0fe4f5311236168a109cc"
       },
-      "required": ["texto", "data"]
+      "texto": {
+        "type": "string",
+        "description": "Conteúdo do tweet",
+        "example": "Este é um tweet de exemplo"
+      },
+      "link": {
+        "type": "string",
+        "description": "Link associado ao tweet",
+        "example": "http://exemplo.com"
+      },
+      "data": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Data de criação do tweet",
+        "example": "2023-05-01T12:34:56Z"
+      },
+      "isSuicida": {
+        "type": "boolean",
+        "description": "Indica se o tweet contém conteúdo suicida",
+        "example": false
+      }
+    },
+    "required": ["texto", "data"]
+  },
+  "Login": {
+    "type": "object",
+    "properties": {
+      "usuario": {
+        "type": "string",
+        "description": "Nome de usuário",
+        "example": "johndoe"
+      },
+      "senha": {
+        "type": "string",
+        "description": "Senha do usuário",
+        "example": "SenhaForte123"
+      }
+    },
+    "required": ["usuario", "senha"]
+  },
+  "AuthResponse": {
+    "type": "object",
+    "properties": {
+      "token": {
+        "type": "string",
+        "description": "Token JWT gerado",
+        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      },
+      "message": {
+        "type": "string",
+        "description": "Mensagem de erro",
+        "example": "Senha invalida"
+      }
     }
   }
-  
+}
