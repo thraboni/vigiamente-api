@@ -1,7 +1,6 @@
 import { usuario } from "../models/Usuario.js";
-import { perfil } from "../models/Perfil.js";
-import nodemailer from 'nodemailer';
-import bcrypt from 'bcryptjs';
+import nodemailer from "nodemailer";
+import bcrypt from "bcryptjs";
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -39,7 +38,9 @@ class UsuarioController {
     const usuarioUsuario = req.usuarioUsuario;
 
     try {
-      const usuarioEncontrado = await usuario.findOne({usuario: usuarioUsuario});
+      const usuarioEncontrado = await usuario.findOne({
+        usuario: usuarioUsuario,
+      });
       const listaPerfis = usuarioEncontrado.perfis;
 
       res.status(200).json(listaPerfis);
@@ -72,14 +73,15 @@ class UsuarioController {
     function gerarSenhaAleatoria(length) {
       const caracteres =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      const caracteresEspeciais =
-        "!@#$%^&*()_+~`|}{[]:;?><,./-=";
+      const caracteresEspeciais = "!@#$%^&*()_+~`|}{[]:;?><,./-=";
       let senha = "";
       for (let i = 0; i < length - 1; i++) {
         const randomIndex = Math.floor(Math.random() * caracteres.length);
         senha += caracteres[randomIndex];
       }
-      const randomIndex = Math.floor(Math.random() * caracteresEspeciais.length);
+      const randomIndex = Math.floor(
+        Math.random() * caracteresEspeciais.length
+      );
       senha += caracteresEspeciais[randomIndex];
       return senha;
     }
@@ -89,30 +91,12 @@ class UsuarioController {
       const senhaHash = await bcrypt.hash(senhaAleatoria, 8);
       novoUsuario.senha = senhaHash;
 
-      if (novoUsuario.perfis && novoUsuario.perfis.length > 0) {
-        console.log(novoUsuario);
-        const perfisIds = novoUsuario.perfis;
-        const perfisEncontrados = await perfil.find({
-          _id: { $in: perfisIds },
-        });
-        const perfisDetalhados = perfisEncontrados.map((perfil) =>
-          perfil.toObject()
-        );
-        const usuarioCompleto = { ...novoUsuario, perfis: perfisDetalhados };
-        const usuarioCriado = await usuario.create(usuarioCompleto);
-        await enviarEmail(novoUsuario.email, senhaAleatoria);
-        res.status(201).json({
-          message: "Usuario criado com sucesso",
-          usuario: usuarioCriado,
-        });
-      } else {
-        const usuarioCriado = await usuario.create(novoUsuario);
-        await enviarEmail(novoUsuario.email, senhaAleatoria);
-        res.status(201).json({
-          message: "Usuario criado com sucesso",
-          usuario: usuarioCriado,
-        });
-      }
+      const usuarioCriado = await usuario.create(novoUsuario);
+      await enviarEmail(novoUsuario.email, senhaAleatoria);
+      res.status(201).json({
+        message: "Usuario criado com sucesso",
+        usuario: usuarioCriado,
+      });
     } catch (error) {
       res
         .status(500)
@@ -141,16 +125,6 @@ class UsuarioController {
       res.status(500).json({ message: `${erro.message} - Falha na exclusão` });
     }
   }
-
-  // static async listarLivrosPorEditora (req, res) {
-  //     const editora = req.query.editora;
-  //     try {
-  //         const livrosPorEditora = await livro.find({ editora: editora });
-  //         res.status(200).json(livrosPorEditora);
-  //     } catch (erro) {
-  //         res.status(500).json({ message: `${erro.message} - Falha na busca` });
-  //     }
-  // };
 }
 
 export default UsuarioController;

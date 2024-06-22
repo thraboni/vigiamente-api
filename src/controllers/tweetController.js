@@ -1,5 +1,4 @@
 import { tweet } from "../models/Tweet.js";
-import { perfil } from "../models/Perfil.js";
 
 class TweetController {
 

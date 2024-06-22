@@ -1,11 +1,14 @@
 import { usuario } from "../models/Usuario.js";
-import { perfil } from "../models/Perfil.js";
 import { tweet } from "../models/Tweet.js";
 
 class PerfilController {
   static async listarPerfis(req, res) {
     try {
-      const listaPerfis = await perfil.find({});
+      const listaUsuarios = await usuario.find({});
+      let listaPerfis = [];
+      listaUsuarios.forEach((usuario) => {
+        listaPerfis = listaPerfis.concat(usuario.perfis);
+      });
       res.status(200).json(listaPerfis);
     } catch (erro) {
       res
@@ -14,11 +17,12 @@ class PerfilController {
     }
   }
 
-  static async listarPerfilPorId(req, res) {
+  static async listarPerfilPorIdUsuario(req, res) {
     try {
-      const id = req.params.id;
-      const perfilEncontrado = await perfil.findById(id);
-      res.status(200).json(perfilEncontrado);
+      const id = req.params.idUsuario;
+      const usuarioEncontrado = await usuario.findById(id);
+      const perfisEncontrados = usuarioEncontrado.perfis;
+      res.status(200).json(perfisEncontrados);
     } catch (erro) {
       res
         .status(500)
@@ -26,28 +30,56 @@ class PerfilController {
     }
   }
 
+  // static async listarLivrosPorEditora (req, res) {
+  //     const editora = req.query.editora;
+  //     try {
+  //         const livrosPorEditora = await livro.find({ editora: editora });
+  //         res.status(200).json(livrosPorEditora);
+  //     } catch (erro) {
+  //         res.status(500).json({ message: `${erro.message} - Falha na busca` });
+  //     }
+  // };
+
   static async listarTweets(req, res) {
     try {
-        const id = req.params.id;
-        const perfilEncontrado = await perfil.findById(id);
+      const perfil = req.query.perfil;
 
-        if (!perfilEncontrado) {
-            return res.status(404).json({ message: "Perfil não encontrado" });
+      if (!perfil) {
+        return res
+          .status(400)
+          .json({ message: "Parâmetro 'perfil' é necessário" });
+      }
+
+      const usuarios = await usuario.find({
+        perfis: { $elemMatch: { usuario: perfil } },
+      });
+
+      let perfilCorrespondente = null;
+      for (const usuario of usuarios) {
+        for (const p of usuario.perfis) {
+          if (p.usuario === perfil) {
+            perfilCorrespondente = p;
+            break;
+          }
         }
-        
-        const tweetsIds = perfilEncontrado.tweets;
-        const tweetsEncontrados = await tweet.find({ _id: { $in: tweetsIds } });
-        console.log(tweetsEncontrados)
-        const tweetsDetalhados = tweetsEncontrados.map((tweet) => {
-          return tweet.toObject();
-        });
-        res.status(200).json(tweetsDetalhados);
+        if (perfilCorrespondente) {
+          break;
+        }
+      }
+
+      if (!perfilCorrespondente) {
+        return res.status(404).json({ message: "Perfil não encontrado" });
+      }
+
+      const tweetIds = perfilCorrespondente.tweets;
+      const tweets = await tweet.find({ _id: { $in: tweetIds } });
+      res.status(200).json(tweets);
     } catch (erro) {
-        res.status(500).json({ message: `${erro.message} - Falha na requisição do perfil` });
+      res
+        .status(500)
+        .json({ message: `${erro.message} - Falha na requisição` });
     }
-}
-
-
+  }
 
   static async cadastrarPerfil(req, res) {
     const novoPerfil = req.body;
@@ -82,7 +114,7 @@ class PerfilController {
     const usuarioUsuario = req.usuarioUsuario;
 
     try {
-      const perfilCriado = await perfil.create({ usuario: usuarioTwitter });
+      const perfilCriado = { usuario: usuarioTwitter, tweets: [] };
 
       const usuarioAtualizado = await usuario.findOneAndUpdate(
         { usuario: usuarioUsuario },

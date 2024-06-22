@@ -27,7 +27,7 @@ const routes = express.Router();
  *                 $ref: '#/components/schemas/Perfil'
  */
 routes.get("/perfis", PerfilController.listarPerfis);
-routes.get("/perfis/:id/tweets", PerfilController.listarTweets);
+routes.get("/perfis/tweets", PerfilController.listarTweets);
 
 /**
  * @swagger
@@ -52,7 +52,7 @@ routes.get("/perfis/:id/tweets", PerfilController.listarTweets);
  *       404:
  *         description: Perfil não encontrado
  */
-routes.get("/perfis/:id", PerfilController.listarPerfilPorId);
+routes.get("/perfis/:idUsuario", PerfilController.listarPerfilPorIdUsuario);
 
 /**
  * @swagger
@@ -76,7 +76,7 @@ routes.get("/perfis/:id", PerfilController.listarPerfilPorId);
  *       400:
  *         description: Erro na requisição
  */
-routes.post("/perfis", PerfilController.cadastrarPerfil);
+routes.post("/perfis/:idUsuario", PerfilController.cadastrarPerfil);
 routes.post("/app/perfis", PerfilController.cadastrarPerfilUsuario);
 
 /**
