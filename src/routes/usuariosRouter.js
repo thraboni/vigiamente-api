@@ -28,6 +28,7 @@ const router = express.Router();
  */
 router.get("/usuarios", UsuarioController.listarUsuarios);
 router.get("/usuarios/perfis", UsuarioController.listarPerfisDeUsuario);
+router.get("/usuarios/auth", UsuarioController.listarUsuario);
 
 /**
  * @swagger

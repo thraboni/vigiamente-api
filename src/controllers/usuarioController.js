@@ -33,6 +33,21 @@ class UsuarioController {
     }
   }
 
+  static async listarUsuario(req, res) {
+    try {
+      const nomeUsuario = req.usuarioUsuario; // Extrai o nome de usuário do parâmetro da URL
+      const usuarioEncontrado = await usuario.findOne({ usuario: nomeUsuario }); // Busca o usuário pelo atributo 'usuario'
+  
+      if (!usuarioEncontrado) {
+        return res.status(404).json({ message: 'Usuário não encontrado' });
+      }
+  
+      res.status(200).json(usuarioEncontrado);
+    } catch (erro) {
+      res.status(500).json({ message: `${erro.message} - Falha na requisição do usuário` });
+    }
+  }
+
   static async listarPerfisDeUsuario(req, res) {
     const usuarioUsuario = req.usuarioUsuario;
 

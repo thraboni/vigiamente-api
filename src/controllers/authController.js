@@ -35,7 +35,7 @@ class AuthController {
         }
       );
 
-      return res.status(200).send({ token });
+      return res.status(200).send({ token, usuario });
     } catch (error) {
       res.status(401).send({ message: error.message });
     }
