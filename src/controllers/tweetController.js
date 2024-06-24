@@ -25,44 +25,46 @@ class TweetController {
         try {
             // Verifica se o link já está presente no banco de dados
             const linkExistente = await tweet.findOne({ link: req.body.link });
-        
+    
             // Se o link já existir, retorna uma mensagem informando que o tweet não foi cadastrado
             if (linkExistente) {
                 return res.status(200).json({ message: "O tweet não foi cadastrado porque o link já existe" });
             }
-        
+    
             // Cria um novo tweet
-            const novoTweet = await tweet.create(req.body);
-        
+            const novoTweet = new tweet(req.body);
+            await novoTweet.save();
+    
             // Extrai o ID do perfil e o nome do perfil do corpo da requisição
             const usuarioId = req.body.usuarioId;
             const nomePerfil = req.body.nomePerfil;
-        
+    
             // Verifica se o usuarioId está presente
             if (!usuarioId || !nomePerfil) {
                 return res.status(400).json({ message: "usuario ID ou nome do perfil não fornecido" });
             }
-        
+    
             // Busca o usuário pelo usuarioId e pelo nome do perfil
             const usuarioEncontrado = await usuario.findOneAndUpdate(
                 { 
                     "_id": usuarioId,
                     "perfis.usuario": nomePerfil
                 },
-                { $push: { "perfis.$.tweets": { tweet_id: novoTweet._id, texto: novoTweet.texto, link: novoTweet.link, IsSuicida: novoTweet.isSuicida } } },
+                { $push: { "perfis.$.tweets": { tweet_id: novoTweet._id } } },
                 { new: true }
             );
-        
+    
             if (!usuarioEncontrado) {
                 return res.status(404).json({ message: "Usuário não encontrado ou perfil não encontrado" });
             }
-        
+    
             // Responde com sucesso
             res.status(201).json({ message: "Criado com sucesso", tweet: novoTweet });
         } catch (erro) {
             res.status(500).json({ message: erro.message + " - Falha ao cadastrar tweet" });
         }
     }
+    
     
 
     static async atualizarTweet (req, res) {

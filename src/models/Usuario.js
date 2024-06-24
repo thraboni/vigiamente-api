@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { tweetSchema } from "./Tweet.js";
 const usuarioSchema = new mongoose.Schema({
     id: { type: mongoose.Schema.Types.ObjectId },
     usuario: { type: String, required: true },
@@ -8,7 +7,11 @@ const usuarioSchema = new mongoose.Schema({
     perfis: [
         {
             usuario: { type: String, required: true },
-            tweets: [tweetSchema]
+            tweets: [
+                {
+                    tweet_id: { type: String, required: true }
+                }
+            ]
         }
     ],
     admin: { type: Boolean }
