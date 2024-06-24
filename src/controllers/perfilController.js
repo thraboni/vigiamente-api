@@ -30,16 +30,6 @@ class PerfilController {
     }
   }
 
-  // static async listarLivrosPorEditora (req, res) {
-  //     const editora = req.query.editora;
-  //     try {
-  //         const livrosPorEditora = await livro.find({ editora: editora });
-  //         res.status(200).json(livrosPorEditora);
-  //     } catch (erro) {
-  //         res.status(500).json({ message: `${erro.message} - Falha na busca` });
-  //     }
-  // };
-
   static async listarTweets(req, res) {
     try {
       const perfil = req.query.perfil;
@@ -71,7 +61,7 @@ class PerfilController {
         return res.status(404).json({ message: "Perfil não encontrado" });
       }
 
-      const tweetIds = perfilCorrespondente.tweets;
+      const tweetIds = perfilCorrespondente.tweets.map((t) => t.tweet_id);
       const tweets = await tweet.find({ _id: { $in: tweetIds } });
       res.status(200).json(tweets);
     } catch (erro) {
