@@ -9,7 +9,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.USER_APP_SENHA,
   },
 });
-
 class UsuarioController {
   static async listarUsuarios(req, res) {
     try {
@@ -123,6 +122,44 @@ class UsuarioController {
       res.status(200).json({ message: "Usuario excluído com sucesso" });
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - Falha na exclusão` });
+    }
+  }
+  static async updateTweetInPerfil(req, res) {
+    const { _id, perfil_nome, tweet_id, isSuicida, texto, link } = req.body;
+
+    try {
+      // Encontrar o usuário pelo ID
+      const usuarioEncontrado = await usuario.findById(_id);
+
+      if (!usuarioEncontrado) {
+        return res.status(404).json({ message: "Usuário não encontrado" });
+      }
+
+      // Encontrar o perfil pelo nome de usuário do perfil
+      const perfil = usuarioEncontrado.perfis.find(p => p.usuario === perfil_nome);
+
+      if (!perfil) {
+        return res.status(404).json({ message: "Perfil não encontrado" });
+      }
+
+      // Encontrar o tweet pelo ID do tweet
+      const tweet = perfil.tweets.find(t => t._id.toString() === tweet_id);
+
+      if (!tweet) {
+        return res.status(404).json({ message: "Tweet não encontrado" });
+      }
+
+      // Atualizar o campo isSuicida e outros campos do tweet
+      tweet.isSuicida = isSuicida;
+      tweet.texto = texto;
+      tweet.link = link;
+
+      // Salvar as alterações no banco de dados
+      await usuarioEncontrado.save();
+
+      res.status(200).json({ message: "Tweet atualizado com sucesso" });
+    } catch (erro) {
+      res.status(500).json({ message: "Falha ao atualizar tweet" });
     }
   }
 }

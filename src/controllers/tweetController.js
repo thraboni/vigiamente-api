@@ -49,7 +49,7 @@ class TweetController {
                     "_id": usuarioId,
                     "perfis.usuario": nomePerfil
                 },
-                { $push: { "perfis.$.tweets": { tweet_id: novoTweet._id, texto: novoTweet.texto, link: novoTweet.link } } },
+                { $push: { "perfis.$.tweets": { tweet_id: novoTweet._id, texto: novoTweet.texto, link: novoTweet.link, IsSuicida: novoTweet.isSuicida } } },
                 { new: true }
             );
         

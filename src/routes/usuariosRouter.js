@@ -110,7 +110,7 @@ router.post("/usuarios", UsuarioController.cadastrarUsuario);
  *         description: Usuário não encontrado
  */
 router.put("/usuarios/:id", UsuarioController.atualizarUsuario);
-
+router.put("/usuarios/update-tweet", UsuarioController.updateTweetInPerfil);
 /**
  * @swagger
  * /usuarios/{id}:
